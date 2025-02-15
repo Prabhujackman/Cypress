@@ -18,6 +18,7 @@ describe('ticketbooking',function(){
 
         cy.visit('https://www.dummyticket.com/dummy-ticket-for-visa-application/')
         cy.get('#place_order').click({force:true})
+        // validate the error messages for required fields - negative flow
         cy.get('[data-id="billing_phone"]')
         .invoke('text')
   .then((text) => {
@@ -75,8 +76,8 @@ describe('ticketbooking',function(){
         
 
         const dt = new Booking();
-        // add values to the fields
-
+        // add values to the fields - positive flow
+  
       dt.firstname().type(this.data.Firstname)
       dt.lastname().type(this.data.Lastname)
       dt.dob().click({force:true})
