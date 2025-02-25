@@ -27,6 +27,10 @@
 /// <reference types = "cypress"/> 
 
 /// <reference types = "cypress-xpath"/>
+import 'cypress-file-upload';
+import '@4tw/cypress-drag-drop'
+require('cypress-downloadfile/lib/downloadFileCommand')
+
 
 Cypress.on('uncaught:exception', (err, runnable) => {
     // Log the error to the console
@@ -35,10 +39,61 @@ Cypress.on('uncaught:exception', (err, runnable) => {
     return false;
   });
 
-  Cypress.Commands.add('login', (email, pw) => {
-    cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
-    cy.get("input[placeholder='Username']").type(email)
-    cy.get("input[placeholder='Password']").type(pw)
-    cy.get("button[type='submit']").click();
+  //Cypress.Commands.add('login', (email, pw) => {
+    //cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
+    //cy.get("input[placeholder='Username']").type(email)
+    //cy.get("input[placeholder='Password']").type(pw)
+    //cy.get("button[type='submit']").click();
+ // })
+
+
+Cypress.Commands.add('getIframe', (iframe)=>{
+  cy.get(iframe) // locate the ifram
+  .its('0.contentDocument.body').should('be.visible') // only one document is present 
+  .then(cy.wrap); 
+
+})
+
+
+
+
+
+ Cypress.Commands.add('loginlockton', () => {
+cy.clearCookies();
+cy.clearLocalStorage();
+ cy.viewport(1920, 1080); 
+  cy.visit('http://lockton-qax.unqork.io/auth/login'); 
+  cy.wait(5000)
+  cy.viewport(1920, 1080);
+cy.get('#username').type('gopi.k-x+sysadmin@auxosolutions.io');
+cy.get('#password').type('Gopi@Auxo123');
+cy.get("input[value='Login']").click();
+cy.wait(5000)
+cy.visit('http://lockton-qax.unqork.io/app/dashboard')
+});
+
+  Cypress.LocalStorage.clear = function () {
+    return null;
+  };
+
+
+  Cypress.Commands.add('visiturl', ()=> {
+cy.visit('https://codenboxautomationlab.com/practice/')
   })
-  
+
+  Cypress.Commands.add('clicklink', (label) => {
+    cy.get('a').contains(label).click();
+  })
+
+// Overwrite 'contains' method from custom command - for case-insensitive 
+Cypress.Commands.add('containscase', (selector, text) => {
+  cy.get(selector).contains(text, { matchCase: false }).click({ force: true });
+});
+
+Cypress.Commands.add('Login',(email,password)=>{
+  cy.get('#input-username').clear()
+  cy.get('#input-password').clear()
+
+  cy.get('#input-username').type(email)
+  cy.get('#input-password').type(password)
+})
